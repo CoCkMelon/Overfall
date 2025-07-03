@@ -1,5 +1,5 @@
-name: 🎮 Unity Multi-Platform Build CI
-
+name: Unity Multi-Platform Build CI
+run-name: unetybuild
 on:
   push:
     branches: [ main ]
