@@ -55,7 +55,7 @@ jobs:
       - name: Organize Build Artifacts
         if: matrix.targetPlatform == 'Android'
         run: |
-          mv "build/${{ matrix.targetPlatform }}" "build/${{ env.UNITY_PROJECT_NAME }}-Android-${{ env.BUILD_VERSION }}/"
+          mv "build/${{ matrix.targetPlatform }}" "build/${{ env.UNITY_PROJECT_NAME }}-${{ matrix.targetPlatform }}-${{ env.BUILD_VERSION }}"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
