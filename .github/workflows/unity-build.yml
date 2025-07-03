@@ -1,9 +1,6 @@
 name: Unity Multi-Platform Build CI
 run-name: unetybuild
-on:
-  push:
-    branches: [ main ]
-  pull_request:
+on: [push]
 
 jobs:
   build-linux-android-webgl:
