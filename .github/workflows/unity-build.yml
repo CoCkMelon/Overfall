@@ -1,9 +1,9 @@
 name: Unity Multi-Platform Build CI
-run-name: unetybuild
+
 on: [push]
 
 env:
-  UNITY_PROJECT_NAME: "YourProjectName"  # Change this to your actual project name
+  UNITY_PROJECT_NAME: "YourProjectName"  # Change this to your project name
   BUILD_VERSION: "1.0.0"               # Set your version
 
 jobs:
@@ -48,14 +48,14 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.UNITY_PROJECT_NAME }}
 
-      - name: Organize Build Artifacts
+      - name: Change Build Directory Ownership
         run: |
-          mkdir -p "build/${{ env.UNITY_PROJECT_NAME }}-${{ matrix.targetPlatform }}-${{ env.BUILD_VERSION }}"
-          if [ "${{ matrix.targetPlatform }}" == "Android" ]; then
-            cp -r "build/${{ matrix.targetPlatform }}"/* "build/${{ env.UNITY_PROJECT_NAME }}-${{ matrix.targetPlatform }}-${{ env.BUILD_VERSION }}/"
-          else
-            mv "build/${{ matrix.targetPlatform }}" "build/${{ env.UNITY_PROJECT_NAME }}-${{ matrix.targetPlatform }}-${{ env.BUILD_VERSION }}"
-          fi
+          sudo chown -R $USER:$USER build
+
+      - name: Organize Build Artifacts
+        if: matrix.targetPlatform == 'Android'
+        run: |
+          mv "build/${{ matrix.targetPlatform }}" "build/${{ env.UNITY_PROJECT_NAME }}-Android-${{ env.BUILD_VERSION }}/"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
@@ -93,14 +93,13 @@ jobs:
 
       - name: Organize Build Artifacts
         run: |
-          mkdir "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneWindows64-${{ env.BUILD_VERSION }}"
-          Move-Item -Path "build/StandaloneWindows64" -Destination "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneWindows64-${{ env.BUILD_VERSION }}"
+          mv "build/StandaloneWindows64" "build/${{ env.UNITY_PROJECT_NAME }}-Windows64-${{ env.BUILD_VERSION }}/"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ env.UNITY_PROJECT_NAME }}-StandaloneWindows64-${{ env.BUILD_VERSION }}"
-          path: "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneWindows64-${{ env.BUILD_VERSION }}"
+          name: "${{ env.UNITY_PROJECT_NAME }}-Windows64-${{ env.BUILD_VERSION }}"
+          path: "build/${{ env.UNITY_PROJECT_NAME }}-Windows64-${{ env.BUILD_VERSION }}"
 
   build-macos:
     name: Build on macOS (StandaloneOSX)
@@ -132,11 +131,10 @@ jobs:
 
       - name: Organize Build Artifacts
         run: |
-          mkdir -p "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneOSX-${{ env.BUILD_VERSION }}"
-          mv "build/StandaloneOSX" "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneOSX-${{ env.BUILD_VERSION }}"
+          mv "build/StandaloneOSX" "build/${{ env.UNITY_PROJECT_NAME }}-macOS-${{ env.BUILD_VERSION }}/"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ env.UNITY_PROJECT_NAME }}-StandaloneOSX-${{ env.BUILD_VERSION }}"
-          path: "build/${{ env.UNITY_PROJECT_NAME }}-StandaloneOSX-${{ env.BUILD_VERSION }}"
+          name: "${{ env.UNITY_PROJECT_NAME }}-macOS-${{ env.BUILD_VERSION }}"
+          path: "build/${{ env.UNITY_PROJECT_NAME }}-macOS-${{ env.BUILD_VERSION }}"
