@@ -47,7 +47,6 @@ jobs:
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.UNITY_PROJECT_NAME }}
-          args: -logfile -
 
       - name: Organize Build Artifacts
         run: |
@@ -91,7 +90,6 @@ jobs:
         with:
           targetPlatform: StandaloneWindows64
           buildName: ${{ env.UNITY_PROJECT_NAME }}
-          args: -logfile -
 
       - name: Organize Build Artifacts
         run: |
@@ -131,7 +129,6 @@ jobs:
         with:
           targetPlatform: StandaloneOSX
           buildName: ${{ env.UNITY_PROJECT_NAME }}
-          args: -logfile -
 
       - name: Organize Build Artifacts
         run: |
